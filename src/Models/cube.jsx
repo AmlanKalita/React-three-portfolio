@@ -7,19 +7,23 @@ import { useGLTF, useAnimations } from "@react-three/drei";
 import cubeModel from "../assets/cubeModel.glb"
 import * as THREE from "three"
 import url from "../assets/kda.mp4"
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import GSAP from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSize } from "../Context/SizesContext";
 
 const Cube = (props)=> {
+  const {viewport} = useThree()
+  const {sizes} = useSize(); 
+  GSAP.registerPlugin(ScrollTrigger);
   const [lerp, setLerp] = useState({
     current : 0,
     target : 0,
-    ease : 0.1
+    ease : 0.05
   });
   const group = useRef();
   const { nodes, materials, animations } = useGLTF(cubeModel);
   const {actions,names,mixer} = useAnimations(animations,group)
-  // console.log(actions);
   useEffect(() => {
     actions[names[0]].play();
   }, [mixer]);
@@ -47,14 +51,30 @@ const Cube = (props)=> {
     // console.log(lerp);
 
   }
-  
+  useEffect(()=>{
+    const tl = GSAP.timeline();
+    tl.to(group.current.position, {
+      x: () => {
+        return window.innerWidth * 0.00094
+      },
+      scrollTrigger: {
+        trigger: ".first-move",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.6,
+        invalidateOnRefresh: true
+      }
+    });
+  },[])
   useEffect(() => {
     window.addEventListener('mousemove', onMouseMove);
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
     };
   }, [lerp]);
-  
+  // useEffect(()=>{
+  //   console.log(viewport);
+  // },[viewport])
 
   return (
     <group ref={group} {...props} dispose={null} >

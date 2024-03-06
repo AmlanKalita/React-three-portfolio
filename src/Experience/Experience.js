@@ -15,18 +15,33 @@ import Floor from './World/Floor.js';
 import Curve from './World/Controls.js';
 
 const Experience = () => {
-
+  const canvasProps = {
+    gl: {
+      antialias: true,
+      physicallyCorrectLights : true,
+      outputEncoding : THREE.sRGBEncoding,
+      toneMapping : THREE.CineonToneMapping,
+      toneMappingExposure : 1.75,
+      
+    },
+    shadows : {
+      shadowMap : {
+        enabled : true,
+        type : THREE.PCFSoftShadowMap
+      }
+    }
+    
+  };
   return (
-    <Canvas >
-        <Renderer/>
+    <Canvas {...canvasProps}>
         <Camera/>
         <Light/>
         <Suspense fallback={null}>
           <Cube scale={[0.11,0.11,0.11]} />
         </Suspense>
         <Floor/>
-        <axesHelper args={[5]} />
-        <gridHelper args={[20, 20, 0xff0000, 'teal']} />
+        {/* <axesHelper args={[5]} /> */}
+        {/* <gridHelper args={[20, 20, 0xff0000, 'teal']} /> */}
         {/* <OrbitControls/> */}
         <Curve/>
     </Canvas>
