@@ -1,13 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 // Create a context to hold the size data
-const SizeContext = createContext();
+const GlobalContext = createContext();
 
 // Create a custom hook to access the size context
-export const useSize = () => useContext(SizeContext);
+export const useVariables = () => useContext(GlobalContext);
 
 // Create a provider component to wrap your application
-export const SizeProvider = ({ children }) => {
+export const GlobalProvider = ({ children }) => {
+  const [theme, setTheme] = useState("light");
   const [sizes, setSizes] = useState({
                                     width: window.innerWidth, 
                                     height: window.innerHeight,
@@ -34,8 +35,8 @@ export const SizeProvider = ({ children }) => {
   
 
   return (
-    <SizeContext.Provider value={{ sizes }}>
+    <GlobalContext.Provider value={{ theme,setTheme,sizes }}>
       {children}
-    </SizeContext.Provider>
+    </GlobalContext.Provider>
   );
 };

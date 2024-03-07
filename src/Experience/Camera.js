@@ -5,11 +5,11 @@ import { CameraHelper } from 'three';
 import * as THREE from "three"
 import { lerp } from 'three/src/math/MathUtils';
 import GSAP from 'gsap';
-import { useSize } from '../Context/SizesContext';
+import { useVariables } from '../Context/GlobalContext';
 
 export default function Camera() {
   const {gl, scene} = useThree();
-  const {sizes} = useSize(); 
+  const {sizes} = useVariables(); 
   // console.log(scene);
   const perspectiveCameraRef = useRef();
   const orthographicCameraRef = useRef();

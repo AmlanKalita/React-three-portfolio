@@ -10,11 +10,11 @@ import url from "../assets/kda.mp4"
 import { useFrame, useThree } from "@react-three/fiber";
 import GSAP from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useSize } from "../Context/SizesContext";
 
 const Cube = (props)=> {
-  const {viewport} = useThree()
-  const {sizes} = useSize(); 
+  const rectLightRef = useRef();
+  
+  const {viewport} = useThree();
   GSAP.registerPlugin(ScrollTrigger);
   const [lerp, setLerp] = useState({
     current : 0,
@@ -27,7 +27,7 @@ const Cube = (props)=> {
   useEffect(() => {
     actions[names[0]].play();
   }, [mixer]);
-
+  
   const [video] = useState(()=>{
     const video = document.createElement('video');
     video.src = url;
@@ -52,6 +52,8 @@ const Cube = (props)=> {
 
   }
   useEffect(()=>{
+    rectLightRef.current.rotation.x = -Math.PI / 2;
+    rectLightRef.current.rotation.z = Math.PI / 4;
     const tl = GSAP.timeline();
     tl.to(group.current.position, {
       x: () => {
@@ -665,6 +667,15 @@ const Cube = (props)=> {
             receiveShadow
             geometry={nodes.Plane014_2.geometry}
             material={materials["Wall Two"]}
+          />
+        </group>
+        <group>
+          <rectAreaLight
+            ref={rectLightRef}
+            width={0.5}
+            height={0.7}
+            intensity={3}
+            position={[7.68244, 7, 0.5]}
           />
         </group>
       </group>
