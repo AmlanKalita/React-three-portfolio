@@ -8,54 +8,47 @@ import GSAP from 'gsap';
 import { useVariables } from '../Context/GlobalContext';
 
 export default function Camera() {
-  const {gl, scene} = useThree();
+  const {camera} = useThree();
   const {sizes} = useVariables(); 
-  // console.log(scene);
   const perspectiveCameraRef = useRef();
-  const orthographicCameraRef = useRef();
-  // useHelper(orthographicCameraRef, CameraHelper, 1, 'hotpink')
- 
   const pixelRatio = Math.min(window.devicePixelRatio, 2);
-  const handleResize = () => {
-    const orthographicCamera = orthographicCameraRef.current;
-        orthographicCamera.left =
+  useEffect(()=>{
+        camera.left =
             (-sizes.aspect * sizes.frustrum) / 2;
-        orthographicCamera.right =
+        camera.right =
             (sizes.aspect * sizes.frustrum) / 2;
-        orthographicCamera.top = sizes.frustrum / 2;
-        orthographicCamera.bottom = -sizes.frustrum / 2;
-        orthographicCamera.updateProjectionMatrix();
+        camera.top = sizes.frustrum / 2;
+        camera.bottom = -sizes.frustrum / 2;
+        camera.near = -50;
+        camera.far = 50;
+        camera.position.set(0,6,10);
+        camera.rotation.set(-Math.PI/6,0,0);
+        camera.updateProjectionMatrix();
+  })
+  const handleResize = () => {
+        camera.left =
+            (-sizes.aspect * sizes.frustrum) / 2;
+        camera.right =
+            (sizes.aspect * sizes.frustrum) / 2;
+        camera.top = sizes.frustrum / 2;
+        camera.bottom = -sizes.frustrum / 2;
+        camera.updateProjectionMatrix();
   }
-  
   useEffect(() => {
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, [sizes]);
-  
   return (
     <>
       <PerspectiveCamera
-        // makeDefault
         ref={perspectiveCameraRef}
         fov={35}
         aspect={sizes.width / sizes.height}
         near={0.1}
         far={1000}
         position={[50, -10, 50]}
-      />
-      <OrthographicCamera
-        makeDefault
-        ref={orthographicCameraRef}
-        left={(-sizes.aspect *sizes.frustrum) / 2}
-        right={(sizes.aspect * sizes.frustrum) / 2}
-        top={sizes.frustrum / 2}
-        bottom={-sizes.frustrum / 2}
-        near={-50}
-        far={50}
-        position={[0, 6, 10]}
-        rotation={[-Math.PI / 6, 0, 0]}
       />
     </>
   );

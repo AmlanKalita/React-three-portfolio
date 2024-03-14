@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useRef } from 'react';
 
 // Create a context to hold the size data
 const GlobalContext = createContext();
@@ -16,6 +16,7 @@ export const GlobalProvider = ({ children }) => {
                                     pixelRatio : Math.min(window.devicePixelRatio, 2),
                                     frustrum : 5
                                     });
+  const group = useRef();
 
   // Function to update sizes
     const handleResize = () => {
@@ -35,7 +36,7 @@ export const GlobalProvider = ({ children }) => {
   
 
   return (
-    <GlobalContext.Provider value={{ theme,setTheme,sizes }}>
+    <GlobalContext.Provider value={{ theme,setTheme,sizes,group }}>
       {children}
     </GlobalContext.Provider>
   );

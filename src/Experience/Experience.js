@@ -33,17 +33,17 @@ const Experience = () => {
     
   };
   return (
-    <Canvas {...canvasProps}>
+    <Canvas orthographic {...canvasProps}>
         <Camera/>
         <Light/>
         <Suspense fallback={null}>
-          <Cube scale={[0.11,0.11,0.11]} />
+          <Cube  scale={[0.11,0.11,0.11]}/>
         </Suspense>
         <Floor/>
         {/* <axesHelper args={[5]} /> */}
         {/* <gridHelper args={[20, 20, 0xff0000, 'teal']} /> */}
         {/* <OrbitControls/> */}
-        <Curve/>
+        {/* <Curve/> */}
     </Canvas>
   );
 }

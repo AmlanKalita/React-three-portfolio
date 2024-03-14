@@ -10,19 +10,20 @@ import url from "../assets/kda.mp4"
 import { useFrame, useThree } from "@react-three/fiber";
 import GSAP from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useVariables } from "../Context/GlobalContext";
+import  {MyCubeControls} from "../Experience/World/Controls"
 
 const Cube = (props)=> {
   const rectLightRef = useRef();
-  
-  const {viewport} = useThree();
   GSAP.registerPlugin(ScrollTrigger);
-  const [lerp, setLerp] = useState({
-    current : 0,
-    target : 0,
-    ease : 0.05
-  });
   const group = useRef();
+  const mfref = useRef();
   const { nodes, materials, animations } = useGLTF(cubeModel);
+  // Object.keys(nodes).forEach(key => {
+  //   console.log(key); // 👉️ name, country
+  //   console.log(nodes[key]); // 👉️ James, Chile
+  // });
+  
   const {actions,names,mixer} = useAnimations(animations,group)
   useEffect(() => {
     actions[names[0]].play();
@@ -36,48 +37,7 @@ const Cube = (props)=> {
     video.autoplay = true;
     return video;
   })
-  const onMouseMove = (e) => {
-    const rotation = ((e.clientX - window.innerWidth / 2) * 2) / window.innerWidth;
-    setLerp({
-      ...lerp,
-      target : rotation,
-    });
-    const current = GSAP.utils.interpolate(
-      lerp.current,
-      lerp.target,
-      lerp.ease
-    )
-    group.current.rotation.y = current;
-    // console.log(lerp);
-
-  }
-  useEffect(()=>{
-    rectLightRef.current.rotation.x = -Math.PI / 2;
-    rectLightRef.current.rotation.z = Math.PI / 4;
-    const tl = GSAP.timeline();
-    tl.to(group.current.position, {
-      x: () => {
-        return window.innerWidth * 0.00094
-      },
-      scrollTrigger: {
-        trigger: ".first-move",
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 0.6,
-        invalidateOnRefresh: true
-      }
-    });
-  },[])
-  useEffect(() => {
-    window.addEventListener('mousemove', onMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-    };
-  }, [lerp]);
-  // useEffect(()=>{
-  //   console.log(viewport);
-  // },[viewport])
-
+  MyCubeControls({group,rectLightRef,mfref});
   return (
     <group ref={group} {...props} dispose={null} >
       <group name="Scene">
@@ -210,8 +170,9 @@ const Cube = (props)=> {
           />
         </group>
         <group
+        ref={mfref}
           name="Mini_Floor"
-          position={[-5.441, -0.82, 13.613]}
+          position={[-0.289521, -0.82, 8.83572]}
           rotation={[-Math.PI, 0.823, -Math.PI]}
         >
           <mesh

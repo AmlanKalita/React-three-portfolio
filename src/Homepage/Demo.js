@@ -6,7 +6,6 @@ import { useVariables } from "../Context/GlobalContext";
 export default function Demo(){
     const {theme,setTheme} = useVariables();
     const [active, setActive] = useState(true);
-    console.log(active);
     const handleClick = () =>{
         setActive(!active);
         if(active){
@@ -65,7 +64,7 @@ export default function Demo(){
             </div>
             </section>
             
-            <div className="section-margin"></div>
+            <div className="second-move section-margin"></div>
 
             <section className="second-section section right">
                 <div className="section-intro-wrapper blue-text blue-border">
